@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="15dp"
+    android:background="#CACACA"
+    tools:context=".util.Demo">
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/colorPrimary"
+        app:singleSelection="false">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/bike"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="bike mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/van"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="van mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/cycle"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="cycle mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/car"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="car mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/jcb"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="JCB mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/lorry"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="lorry mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/truck"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="truck mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/bus"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="bus mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/plumber"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="plumber"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/electrician"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="electrician mechanic"
+            android:textSize="20sp"
+            app:checkedIconEnabled="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+</RelativeLayout>

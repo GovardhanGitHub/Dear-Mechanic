@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp"
+    tools:context=".Address">
+
+    <EditText
+
+
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|left"
+
+
+        android:hint="Enter City or Town"
+        android:inputType="textMultiLine"
+
+
+        android:scrollbars="vertical" />
+
+
+    <!--
+     &lt;!&ndash; Multiline input &ndash;&gt;
+     android:lines="8" &lt;!&ndash; Total Lines prior display &ndash;&gt;
+     android:minLines="6" &lt;!&ndash; Minimum lines &ndash;&gt;
+     android:gravity="top|left" &lt;!&ndash; Cursor Position &ndash;&gt;
+     android:maxLines="10" &lt;!&ndash; Maximum Lines &ndash;&gt;
+     android:layout_height="wrap_content" &lt;!&ndash; Height determined by content &ndash;&gt;
+     android:layout_width="match_parent" &lt;!&ndash; Fill entire width &ndash;&gt;
+     android:scrollbars="vertical"
+
+     />-->
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="search" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <TextView
+        android:id="@+id/emptyElement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="sorry no city/town found! try different..."
+        android:textColor="@color/red_400"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+
+</LinearLayout>
