@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gova.openmap.DetailActivity;
@@ -29,7 +29,7 @@ public class MechanicAdapter extends RecyclerView.Adapter<MechanicAdapter.MyView
 
         public TextView name, mechanicType, address;
         public ImageView image;
-        LinearLayout parentLayout;
+        CardView parentLayout;
         Intent intent;
 
         public MyViewHolder(View view) {
@@ -80,7 +80,9 @@ public class MechanicAdapter extends RecyclerView.Adapter<MechanicAdapter.MyView
         holder.name.setText(mechanic.getName());
         holder.address.setText(mechanic.getAddress());
         holder.mechanicType.setText(mechanic.getMechanicTypes().toString());
-        Picasso.get().load(mechanic.getImageUri()).fit().into(holder.image);
+    Picasso.get().load(mechanic.getImageUri()).fit().centerCrop().into(holder.image);
+
+
 
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {

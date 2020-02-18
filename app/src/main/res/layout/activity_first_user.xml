@@ -1,58 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E1F5FE"
-    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true"
     tools:context=".FirstUser">
 
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="12dp">
-
-
-        <Spinner
-
-            android:id="@+id/spinner"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?colorPrimary"
+            app:expandedTitleMarginStart="12dp"
+            app:layout_scrollFlags="scroll">
 
-            android:layout_margin="2dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+
+                <TextView
+
+                    android:id="@+id/mechanicTVResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="@color/light_grey"
+                    android:ellipsize="end"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
+
+                    android:maxLines="1"
+                    android:onClick="getMechanicType"
+                    android:padding="2dp"
+                    android:scrollHorizontally="true"
+                    android:text="Select Mechanic"
+                    android:textColor="@color/grey_80"
+
+                   />
+
+
+                <TextView
+
+                    android:id="@+id/addSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/light_grey"
+                    android:ellipsize="end"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
+
+
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:scrollHorizontally="true"
+                    android:text="Enter City or Town"
+
+                    android:textColor="@color/grey_80"
+                    />
+
+
+                <Button
+                    android:id="@+id/seButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search Mechanic" />
+
+
+            </LinearLayout>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:scrollbars="vertical"
+        android:padding="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="2dp"
+        android:gravity="center"
+        android:text="@string/no_data_available"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <!--
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E1F5FE"
+        android:orientation="vertical"
+        tools:context=".FirstUser">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:gravity="center"
             android:orientation="vertical"
+            android:padding="12dp">
 
-            android:padding="4dp">
+
+            <TextView
+
+                android:id="@+id/mechanicTVResult"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_margin="4dp"
+                android:background="@color/white"
+                android:ellipsize="end"
+
+                android:maxLines="1"
+                android:onClick="getMechanicType"
+                android:padding="2dp"
+                android:scrollHorizontally="true"
+                android:text="Select Mechanic"
+                android:textColor="@color/grey_80"
+
+                android:textSize="14sp" />
 
 
-            <EditText
-
+            <TextView
                 android:id="@+id/addSearch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:cursorVisible="false"
-
-                android:hint="Enter City or Town"
-
-                android:imeOptions="actionSearch"
-                android:inputType="textMultiLine"
-
-                android:scrollbars="vertical"
-                android:textColor="#000"
+                android:layout_height="38dp"
+                android:layout_margin="4dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/white"
+                android:ellipsize="end"
 
 
-                android:textSize="15dp" />
+                android:maxLines="1"
+                android:padding="2dp"
+                android:scrollHorizontally="true"
+                android:text="Enter City or Town"
+
+                android:textColor="@color/grey_80"
+                android:textSize="14sp" />
+
 
             <Button
                 android:id="@+id/seButton"
@@ -60,46 +182,25 @@
                 android:layout_height="wrap_content"
                 android:text="Search Mechanic" />
 
+
         </LinearLayout>
 
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-
-        android:layout_margin="8dp"
-        android:padding="2dp"
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
-
-    <TextView
-        android:id="@+id/empty_view"
-        android:layout_margin="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="visible"
-        android:textColor="@color/red_400"
-        android:text="@string/no_data_available" />
-
-   <!-- <TextView
-
-        android:id="@+id/resulttv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:background="@color/red_400"
-        android:padding="40dp"
-        android:scrollbars="vertical"
-        android:text="Data     :    "
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
-
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_margin="8dp"
-            android:id="@+id/recycleView"
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>-->
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:textColor="@color/red_400"
+            android:visibility="visible" />
+
+
+
+    </LinearLayout>-->

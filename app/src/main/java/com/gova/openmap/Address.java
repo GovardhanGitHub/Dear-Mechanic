@@ -2,6 +2,7 @@ package com.gova.openmap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -70,16 +73,29 @@ public class Address extends AppCompatActivity {
 
     }
 
+    ACProgressFlower dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+
+
+        dialog = new ACProgressFlower.Builder(this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .text("please wait...")
+                .fadeColor(Color.DKGRAY).build();
+
         addressEd = findViewById(R.id.address);
         Button searchButton = findViewById(R.id.search_button);
         listView = findViewById(R.id.listView1);
+
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 String address = addressEd.getText().toString();
                 addressEd.requestFocus();
@@ -89,6 +105,9 @@ public class Address extends AppCompatActivity {
                     return;
                 }
                 hideSoftKeyboard(v);
+
+                dialog.show();
+
                 String url = "https://nominatim.openstreetmap.org/search?q=" + address + "&countrycodes=in&format=json";
                 //addressEd.setText("");
                 OkHttpClient httpClient = new OkHttpClient();
@@ -98,6 +117,8 @@ public class Address extends AppCompatActivity {
                 httpClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+
+                        dialog.dismiss();
                         Log.e(TAG, "error in getting response using async okhttp call");
                         Address.this.runOnUiThread(new Runnable() {
                             @Override
@@ -107,6 +128,12 @@ public class Address extends AppCompatActivity {
                         });
 
                     }
+
+
+
+
+
+
 
 
                     @Override
@@ -134,7 +161,11 @@ public class Address extends AppCompatActivity {
                                             stringBuilder.append(strings[i] + "\n");*/
 
                                         }
+
+
+
                                         fetch_listview(strings);
+                                        dialog.dismiss();
                                         //textView.setText(stringBuilder.toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();

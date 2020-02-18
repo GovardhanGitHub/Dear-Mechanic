@@ -2,7 +2,18 @@ package com.gova.openmap.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-public class Mechanic implements Serializable {
+public class MechanicWithID implements Serializable {
+
+
+    String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     private String name;
     private String imageUri;
@@ -12,31 +23,8 @@ public class Mechanic implements Serializable {
     private ArrayList<String> mechanicTypes;
 
 
-    public Mechanic(String name, String imageUri, String primaryPhone, String secondaryPhone, String address, ArrayList<String> mechanicTypes) {
 
-
-        if (secondaryPhone.trim().isEmpty())
-        {
-            this.secondaryPhone = "No secondary phone";
-        }
-
-        this.name = name;
-        this.imageUri = imageUri;
-        this.primaryPhone = primaryPhone;
-        this.secondaryPhone = secondaryPhone;
-        this.address = address;
-        this.mechanicTypes = mechanicTypes;
-    }
-
-    public Mechanic() {
-    }
-
-    public Mechanic(String name, String primaryPhone, String secondaryPhone, String address, ArrayList<String> mechanicTypes) {
-        this.name = name;
-        this.primaryPhone = primaryPhone;
-        this.secondaryPhone = secondaryPhone;
-        this.address = address;
-        this.mechanicTypes = mechanicTypes;
+    public MechanicWithID() {
     }
 
     public String getName() {
@@ -86,4 +74,6 @@ public class Mechanic implements Serializable {
     public void setMechanicTypes(ArrayList<String> mechanicTypes) {
         this.mechanicTypes = mechanicTypes;
     }
+
+
 }

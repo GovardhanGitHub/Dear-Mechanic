@@ -3,7 +3,9 @@ package com.gova.openmap;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,14 +37,62 @@ public class MechProfile extends AppCompatActivity {
     TextView name, phone, address, mechanictype;
     Button logout;
     ImageView imageView;
+    Mechanic mechanic;
 
 
     private StorageReference mStorageRef;
 
     FirebaseFirestore db;
+    String uid;
 
     FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabaseRef;
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.opt_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.menuLogout:
+                logout();
+                break;
+            case R.id.menuHome:
+                home();
+                break;
+
+            case R.id.edit:
+                edit();
+                break;
+
+        }
+        return true;
+    }
+
+    private void edit() {
+
+        startMechanicEditActivity();
+        /*if (mechanic != null)
+        {
+            startMechanicEditActivity();
+        }*/
+    }
+
+    private void startMechanicEditActivity() {
+
+        Intent i = new Intent(this, MechRegister.class);
+        i.putExtra("MECHANIC", mechanic);
+        i.putExtra("ID",uid);
+        startActivity(i);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +112,7 @@ public class MechProfile extends AppCompatActivity {
         //  mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
-        logout = findViewById(R.id.logout);
+        //logout = findViewById(R.id.logout);
         name = findViewById(R.id.nameLabel);
         phone = findViewById(R.id.numberLabel);
         address = findViewById(R.id.address_label);
@@ -71,7 +121,7 @@ public class MechProfile extends AppCompatActivity {
 
 
 
-        String uid = (String) FirebaseAuth.getInstance().getCurrentUser().getUid();
+         uid = (String) FirebaseAuth.getInstance().getCurrentUser().getUid();
         // String mobile = (String) FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
 
@@ -84,29 +134,26 @@ public class MechProfile extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Mechanic mechanic = documentSnapshot.toObject(Mechanic.class);
+                         mechanic = documentSnapshot.toObject(Mechanic.class);
 
-                        Toast.makeText(MechProfile.this, "Data : "+toString(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(MechProfile.this, "Data : "+toString(), Toast.LENGTH_SHORT).show();
 
+                        if (mechanic != null) {
+                            name.setText(mechanic.getName());
+                            phone.setText(mechanic.getPrimaryPhone() + "\n+91" + mechanic.getSecondaryPhone());
+                            address.setText(mechanic.getAddress());
 
-                        name.setText(mechanic.getName());
-                        phone.setText(mechanic.getPrimaryPhone()+"\n+91"+mechanic.getSecondaryPhone());
-                        address.setText(mechanic.getAddress());
-
-
+/*
                         StringBuilder stringBuilder = new StringBuilder();
                         for (String string : mechanic.getMechanicTypes())
                         {
                             stringBuilder.append(string+"\n");
-                        }
-                        mechanictype.setText(stringBuilder.toString());
-                        Picasso.get().load(mechanic.getImageUri()).into(imageView);
-
-
-
-                        if (dialog.isShowing())
-                        {
-                            dialog.dismiss();
+                        }*/
+                            mechanictype.setText(mechanic.getMechanicTypes().toString());
+                            Picasso.get().load(mechanic.getImageUri()).into(imageView);
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
                         }
 
 
@@ -150,15 +197,25 @@ public class MechProfile extends AppCompatActivity {
                 Toast.makeText(MechProfile.this, "sorry something went wrong! check internet connectivity.."+databaseError, Toast.LENGTH_SHORT).show();
             }
         });*/
+/*
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), FirstActivity.class));
+                logout();
             }
         });
+*/
 
 
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        home();
+    }
+
+    private void home() {
+        startActivity(new Intent(getApplicationContext(), FirstActivity.class));
     }
 
 

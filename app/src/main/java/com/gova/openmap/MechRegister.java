@@ -16,16 +16,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,7 +46,6 @@ public class MechRegister extends AppCompatActivity {
     Intent intent;
     TextView mechTypeLabel;
     ImageView mImageView;
-    private Uri mImageUri;
     Button chooseImage, submit;
     ChipGroup chipGroup;
     ArrayList<String> list;
@@ -71,10 +69,13 @@ public class MechRegister extends AppCompatActivity {
 
 
     String id;
+    Uri mImageUri;
     String primaryMobileNum;
+    int isEditing = 0 ;
 
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    Mechanic mechanic;
 
     TextInputEditText address, name, primaryPhone, secondaryPhone;
 
@@ -82,6 +83,12 @@ public class MechRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mech_register);
+
+
+
+
+
+
 
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
@@ -103,6 +110,7 @@ public class MechRegister extends AppCompatActivity {
 
         id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         primaryMobileNum = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+
         address = findViewById(R.id.editTextAddress);
         mechTypeLabel = findViewById(R.id.labelMechanicType);
         mImageView = findViewById(R.id.mechanicImageView);
@@ -114,10 +122,39 @@ public class MechRegister extends AppCompatActivity {
         chipGroup = (ChipGroup) findViewById(R.id.gender);
 
 
+
+        Intent i = getIntent();
+        mechanic = (Mechanic) i.getSerializableExtra("MECHANIC");
+        if (mechanic != null){
+
+            isEditing = 1 ;
+
+            id = i.getStringExtra("ID");
+            mImageUri = Uri.parse(mechanic.getImageUri());
+
+            chooseImage.setVisibility(View.GONE);
+
+
+            Picasso.get().load(mechanic.getImageUri()).into(mImageView);
+            name.setText(mechanic.getName());
+            primaryPhone.setText(mechanic.getPrimaryPhone());
+            secondaryPhone.setText(mechanic.getSecondaryPhone());
+            address.setText(mechanic.getAddress());
+
+
+            submit.setText("Modify");
+
+
+
+        }
+
+
+
         if (primaryMobileNum != null) {
             primaryPhone.setText(primaryMobileNum);
             primaryPhone.setEnabled(false);
         }
+
         address.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -127,9 +164,21 @@ public class MechRegister extends AppCompatActivity {
 
             }
         });
+
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentAddress(v);
+            }
+        });
+
+
+
+
+
         list = new ArrayList<>();
-        for (int i = 0; i < chipGroup.getChildCount(); i++) {
-            Chip chip = (Chip) chipGroup.getChildAt(i);
+        for (int j = 0; j < chipGroup.getChildCount(); j++) {
+            Chip chip = (Chip) chipGroup.getChildAt(j);
             chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -142,12 +191,6 @@ public class MechRegister extends AppCompatActivity {
                 }
             });
         }
-        address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentAddress(v);
-            }
-        });
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +200,11 @@ public class MechRegister extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validate();
+                if (isEditing == 1) {
+                    modifyValidation();
+                }else {
+                    validate();
+                }
 
             }
         });
@@ -173,6 +220,44 @@ public class MechRegister extends AppCompatActivity {
             tv.setText("New user :"+uname);
         }
 */
+    }
+
+    private void EditandSave() {
+
+
+
+            dialog.show();
+
+           /* Mechanic mechanic = new Mechanic(
+                    name.getText().toString().trim(),
+                    primaryMobileNum,
+                    secondaryPhone.getText().toString().trim(),
+                    address.getText().toString(),
+                    list
+            );*/
+
+
+        DocumentReference documentReference = db.collection("mechanics").document(id);
+        documentReference.update("name", name.getText().toString().trim());
+        documentReference.update("secondaryPhone", secondaryPhone.getText().toString().trim());
+        documentReference.update("address", address.getText().toString().trim());
+        documentReference.update("mechanicTypes", list)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        dialog.dismiss();
+                        Toast.makeText(MechRegister.this,"Document Updated",Toast.LENGTH_LONG).show();
+                        startMechProfile();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dialog.dismiss();
+                        Toast.makeText(MechRegister.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                       // Log.d("Androidview", e.getMessage());
+                    }
+                });
     }
 
 
@@ -209,6 +294,31 @@ public class MechRegister extends AppCompatActivity {
         intent = new Intent(getApplicationContext(), Address.class);
         startActivityForResult(intent, 2);
     }
+
+    void modifyValidation(){
+
+        if (name.getText().toString().trim().isEmpty() || name.getText().toString().trim() == null) {
+            name.setError("please Enter correct Name...");
+            name.requestFocus();
+        } else if (address.getText().toString().trim().isEmpty() || address.getText().toString().trim() == null) {
+            address.setError("please Enter correct Address...");
+            address.requestFocus();
+        } else if (primaryPhone.getText().toString().trim().isEmpty()) {
+            primaryPhone.setError("please Enter correct phone Number...");
+            primaryPhone.requestFocus();
+        } else if (secondaryPhone.getText().toString().trim().isEmpty() || secondaryPhone.getText().toString().trim().length() != 10) {
+            secondaryPhone.setError("please Enter correct phone Number...");
+            secondaryPhone.requestFocus();
+        } else if (list.isEmpty()) {
+            mechTypeLabel.requestFocus();
+            Toast.makeText(this, "select Mechanic Type...", Toast.LENGTH_SHORT).show();
+        } else {
+            EditandSave();
+        }
+
+
+    }
+
 
 
     private void openFileChooser() {
@@ -258,7 +368,7 @@ public class MechRegister extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     String imageUrl = uri.toString();
-                                    Toast.makeText(MechRegister.this, "Upload successful URL : " + imageUrl, Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(MechRegister.this, "Upload successful URL : " + imageUrl, Toast.LENGTH_LONG).show();
                                     updateDatabase(imageUrl);
                                 }
                             });
@@ -285,16 +395,17 @@ public class MechRegister extends AppCompatActivity {
                                             if (dialog.isShowing())
                                             {
                                                 dialog.dismiss();
+                                                Toast.makeText(MechRegister.this, "success in firestore", Toast.LENGTH_SHORT).show();
                                                 startMechProfile();
                                             }
 
-                                            Toast.makeText(MechRegister.this, "success in firestore", Toast.LENGTH_SHORT).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(MechRegister.this, "failure in firestore", Toast.LENGTH_SHORT).show();
+                                            return;
                                         }
                                     });
 
@@ -321,10 +432,11 @@ public class MechRegister extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MechRegister.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MechRegister.this, "Image Upload Failure : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     })
-                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                  /*  .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                             if (dialog.isShowing()) {
@@ -332,7 +444,7 @@ public class MechRegister extends AppCompatActivity {
                             }
                             Toast.makeText(MechRegister.this, "completed...", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    })*/;
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }

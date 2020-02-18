@@ -1,9 +1,13 @@
 <resources>
-    <string name="app_name">Open Map</string>
+    <string name="app_name">Fast Mechanic</string>
     <string name="spinnerHint">Select Mechanic</string>
     <string name="title_activity_address">AddressActivity</string>
     <string name="no_data_available">Sorry.. Mechanics Not Found at this Location..Try different Location</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Logout</string>
+    <string name="home">Home</string>
+    <string name="shareMechanic">Share</string>
+    <string name="edit">Edit</string>
 </resources>
